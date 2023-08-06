@@ -1,0 +1,127 @@
+.slack-header {
+  width: 100%;
+  height: 7.1vh;
+  background-color: #300530;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-div {
+  width: 100%;
+  height: 92.9vh;
+  display: flex;
+}
+
+.left-div {
+  background-color: rgb(66, 2, 66);
+  height: 92.9vh;
+  width: 250px;
+}
+
+.center-nav {
+  flex: 0.6;
+  display: flex;
+  align-items: center;
+}
+
+.left-nav {
+  flex: 0.2;
+}
+.nav-input {
+  width: 95%;
+  border: none;
+  background-color: rgba(128, 128, 128, 0);
+  outline: none;
+  font-size: 14px;
+  color: white;
+}
+
+.right-nav {
+  flex: 0.2;
+  justify-content: end;
+}
+.clock {
+  color: white;
+  margin-right: 30px;
+  font-size: 20px;
+}
+
+.search-div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgba(128, 128, 128, 0.301);
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.profile-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  margin: 0px 13px 0px 0px;
+}
+
+.search {
+  color: rgba(255, 255, 255, 0.699);
+  font-size: 18px;
+  margin: auto;
+}
+
+.circle {
+  color: white;
+  font-size: 22px;
+  margin-right: 18px;
+}
+
+.right-nav {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 1000px) {
+  .left-div {
+    background-color: rgb(66, 2, 66);
+    height: 92.9vh;
+    width: 220px;
+  }
+}
+@media screen and (max-width: 700px) {
+  .left-div {
+    background-color: rgb(66, 2, 66);
+    height: 92.9vh;
+    width: 200px;
+  }
+}
+
+@media screen and (max-width: 673px) {
+  .left-div {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .left-nav {
+    display: none;
+  }
+  .center-nav {
+    flex: 0.8;
+    display: flex;
+    align-items: center;
+  }
+
+  .right-nav {
+    flex: 0.2;
+    justify-content: end;
+    margin-left: 5px;
+  }
+
+  .slack-header {
+    width: 100%;
+    height: 7.1vh;
+    background-color: #300530;
+    display: flex;
+    padding: 0px 10px;
+    justify-content: space-between;
+  }
+}

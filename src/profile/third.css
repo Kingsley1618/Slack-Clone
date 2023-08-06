@@ -1,0 +1,77 @@
+.team-header {
+  width: 100%;
+  height: 7.1vh;
+  background-color: #300530;
+}
+
+.main-div {
+  width: 100%;
+  height: 92.9vh;
+  display: flex;
+}
+
+.left-div {
+  background-color: rgb(66, 2, 66);
+  height: 92.9vh;
+  width: 250px;
+}
+.button-next {
+  background-color: rgb(87, 22, 87);
+  width:200px;
+  color:white;
+  font-weight:bold;
+  padding:8px 0px;
+  margin-top:70px;
+}
+.team-name {
+  color:white;
+  font-weight:800;
+  padding-left:20px;
+  font-size:18px;
+  height:50px;
+  display:flex;
+  align-items: center;
+  border-top:1px solid rgba(128, 128, 128, 0.39);
+  border-bottom:1px solid rgba(128, 128, 128, 0.39);
+}
+
+.channel-name {
+color:rgba(255,255,255,0.5);
+padding:0px 18px;
+font-size:16px;
+}
+.personal-small-image {
+width:25px;
+border-radius:5px;
+height:25px;
+}
+.personal-name {
+  max-width:170px;
+  overflow:hidden;
+  white-space: nowrap;
+  font-size:15px;
+  text-overflow: ellipsis;
+ 
+}
+@media screen and (max-width: 1000px) {
+  .left-div {
+    background-color: rgb(66, 2, 66);
+    height: 92.9vh;
+    width: 220px;
+  }
+}
+@media screen and (max-width: 700px) {
+  .left-div {
+    background-color: rgb(66, 2, 66);
+    height: 92.9vh;
+    width: 200px;
+  }
+}
+
+
+@media screen and (max-width: 673px) {
+
+  .left-div {
+    display:none;
+  }
+}
