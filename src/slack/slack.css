@@ -21,6 +21,8 @@
   border-radius: 5px;
 }
 
+
+
 .channel-name {
   color: rgba(255, 255, 255, 0.781);
   font-size: 15px;
@@ -126,6 +128,8 @@ outline:none;
 .right-nav {
   flex: 0.2;
   justify-content: end;
+  display: flex;
+  align-items: center;
 }
 .clock {
   color: white;
@@ -161,10 +165,7 @@ outline:none;
   margin-right: 18px;
 }
 
-.right-nav {
-  display: flex;
-  align-items: center;
-}
+
 
 @media screen and (max-width: 1000px) {
   .left-div {

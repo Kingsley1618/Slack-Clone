@@ -9,6 +9,7 @@ const userSlice = createSlice({
   reducers : {
     selectId(state,action) {
       state.id = action.payload.id
+      console.log(state.id)
     }
   }
 });

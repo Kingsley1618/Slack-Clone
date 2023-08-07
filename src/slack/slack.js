@@ -2,12 +2,15 @@ import React from 'react';
 import { useState, useContext } from 'react';
 import './slack.css';
 import { UserContext } from '../context';
+import './slackTwo.css';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserActions } from '../store';
+import { BsChatLeftDots } from 'react-icons/bs';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
+import { AiOutlineSend } from 'react-icons/ai';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { PiNotePencilDuotone } from 'react-icons/pi';
 import { BiSolidRightArrow } from 'react-icons/bi';
@@ -115,7 +118,27 @@ function Slack() {
         </div>
 
         <div className="right-div px-5 pt-4">
-          {channelId && roomName?.data()?.inputVal}
+          <div className="chat-header">
+            <div className="chat-name">
+              {channelId && roomName?.data()?.inputVal}
+            </div>
+            <div>
+              <BsChatLeftDots className="message" />
+            </div>
+          </div>
+
+          <div className="message-div"></div>
+
+          <div className="chat-input">
+            <div className="chat-div">
+              <input className="" className="chat" placeholder="Chat" />
+            </div>
+            <div className="send">
+              <button type="button" className="button-send">
+                <AiOutlineSend />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
