@@ -12,10 +12,97 @@
   display: flex;
 }
 
+.channel {
+  color: rgba(255, 255, 255, 0.781);
+  font-size: 15px;
+
+  font-weight: bold;
+  margin: 0px 5px;
+  border-radius: 5px;
+}
+
+.channel-name {
+  color: rgba(255, 255, 255, 0.781);
+  font-size: 15px;
+
+  font-weight: bold;
+ 
+  
+}
+
+.input-div {
+  position: absolute;
+  bottom: 5px;
+  display: flex;
+width:20%;
+  flex-direction: column;
+ align-items: center;
+  
+}
+
+.test {
+  width:100%;
+  position: absolute;
+  bottom:10px;
+}
+.channel-input {
+  width: 95%;
+ display: block;
+  margin: auto;
+border:none;
+border-radius: 10px;
+outline:none;
+}
+
+.channel:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.212);
+}
+
+.hash {
+  font-size: 17px;
+ 
+  margin-left: 18px;
+}
+.channels-title {
+  color: rgba(255, 255, 255, 0.507);
+  font-weight: bold;
+  cursor: pointer;
+}
+.arrow-right {
+  color: rgba(255, 255, 255, 0.753);
+  margin-right: 9px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+
+.left-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px 8px 17px;
+  border-top: 1px solid rgba(128, 128, 128, 0.322);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.322);
+}
+.channel-header {
+  align-items: center;
+
+
+}
+.note {
+  background-color: white;
+  padding: 3px 9px 5px 9px;
+  border-radius: 50%;
+  font-size: 19px;
+  font-weight: bold;
+}
+
 .left-div {
   background-color: rgb(66, 2, 66);
   height: 92.9vh;
   width: 250px;
+  position: relative;
 }
 
 .center-nav {
