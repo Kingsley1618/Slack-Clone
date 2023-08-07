@@ -115,7 +115,7 @@ function Slack() {
         </div>
 
         <div className="right-div px-5 pt-4">
-          
+          {channelId && roomName?.data()?.inputVal}
         </div>
       </div>
     </div>
