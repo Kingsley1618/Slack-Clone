@@ -1,8 +1,13 @@
 import React from 'react';
-import {useState} from "react";
+import { useState, useContext } from 'react';
 import './first.css';
-function Personal() {
-  const [name, setName] = useState()
+import { UserContext } from '../context';
+function Team() {
+  const [name, setName] = useState();
+  const { team, setTeam } = useContext(UserContext);
+  function teamName() {
+    setTeam(name);
+  }
   return (
     <div className="">
       <div className="team-header"></div>
@@ -24,14 +29,21 @@ function Personal() {
             that your team will recognize.
           </div>
 
-          <input type="text" onChange = {(event)=>{
-setName(event.target.value)
-          }} placeholder = "Ex: Acme Marketing or Acme Co" className="form-control w-100 mt-4 fs-5" />
+          <input
+            type="text"
+            onChange={(event) => {
+              setName(event.target.value);
+            }}
+            placeholder="Ex: Acme Marketing or Acme Co"
+            className="form-control w-100 mt-4 fs-5"
+          />
 
-          <button className="button-next btn">Next</button>
+          <button className="button-next btn" onClick={teamName}>
+            Next
+          </button>
         </div>
       </div>
     </div>
   );
 }
-export default Personal;
+export default Team;

@@ -1,12 +1,20 @@
 import React, { StrictMode } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { AiFillApple } from 'react-icons/ai';
+import { auth } from '../firebase';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 export default function Login() {
+  function googleHandler() {
+    const provider = new GoogleAuthProvider();
+   signInWithPopup(auth,provider).then((auth)=> {
+     console.log(auth)
+   })
+  }
   return (
     <div className="Login pt-5">
       <img
         src="slack.jpg"
-        alt="slack-img"
+        alt="slackimg"
         style={{ width: '100px' }}
         className="mx-auto d-block"
       />
@@ -60,6 +68,7 @@ export default function Login() {
             alignItems: 'center',
             justifyContent: 'center',
           }}
+          onClick={googleHandler}
         >
           <FcGoogle className="fs-5" />{' '}
           <div className="ps-2">Continue With Google</div>

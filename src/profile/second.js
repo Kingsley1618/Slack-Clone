@@ -1,15 +1,17 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { UserContext } from '../context';
 import './second.css';
 function Personal() {
   const [val, setVal] = useState();
+  const {team, setTeam} = useContext(UserContext);
   return (
     <div className="">
       <div className="team-header"></div>
 
       <div className="main-div">
         <div className="left-div">
-          <h5 className="team-name">{name}</h5>
+          <h5 className="team-name">{team}</h5>
 <div className="">
           <div className="ps-3 pt-1" style = {{color : "rgba(255,255,255,0.72)"}}>Direct messages</div>
          
