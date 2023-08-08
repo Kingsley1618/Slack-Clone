@@ -1,24 +1,33 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import './slack.css';
 import { UserContext } from '../context';
 import './slackTwo.css';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { AiOutlineSearch } from 'react-icons/ai';
+import firebase from 'firebase/compat/app';
 import { db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
+import { AiOutlineAudio } from 'react-icons/ai';
 import { UserActions } from '../store';
 import { BsChatLeftDots } from 'react-icons/bs';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { AiOutlineSend } from 'react-icons/ai';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { PiNotePencilDuotone } from 'react-icons/pi';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from 'react-speech-recognition';
 import { BiSolidRightArrow } from 'react-icons/bi';
 function Slack() {
   const [channel, setChannel] = useState();
   const { inputVal, setInputVal } = useContext(UserContext);
   const channelId = useSelector((state) => state.id);
+  const [text, setText] = useState();
   const [newChannel, error, loading] = useCollection(db.collection('rooms'));
+  const [messageText] = useCollection(
+    channelId && db.collection('rooms').doc(channelId).collection('messages')
+  );
   const [roomName, stop, waiting] = useDocument(
     channelId && db.collection('rooms').doc(channelId)
   );
@@ -26,6 +35,13 @@ function Slack() {
   const dispatch = useDispatch();
   function toggleChannel() {
     setOpen((open) => !open);
+  }
+  function sendMessage() {
+    db.collection('rooms').doc(channelId).collection('messages').add({
+      text,
+      timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    setText("")
   }
 
   function addChannel() {
@@ -35,6 +51,29 @@ function Slack() {
   function selectChannel(id) {
     dispatch(UserActions.selectId({ id }));
   }
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
+  function startAudio() {
+    SpeechRecognition.startListening();
+  }
+  useEffect(() => {
+    function changingVoice() {
+      if (transcript !== '' || transcript !== null || transcript !== ' ') {
+        setText(transcript);
+      }
+    }
+
+    changingVoice();
+  }, [transcript]);
   return (
     <div className="">
       <div className="slack-header">
@@ -127,17 +166,44 @@ function Slack() {
             </div>
           </div>
 
-          <div className="message-div"></div>
+          <div className="message-div">
+            {messageText?.docs.map((doc) => {
+              return (
+                <div className="text-div">
+                  <div className="text">{doc.data().text}</div>
+                </div>
+              );
+            })}
+          </div>
 
           <div className="chat-input">
             <div className="chat-div">
-              <input className="" className="chat" placeholder="Chat" />
+              <input
+                className=""
+                className="chat"
+                placeholder="Chat"
+                value={text}
+                onChange={(event) => {
+                  setText(event.target.value);
+                }}
+              />
             </div>
             <div className="send">
-              <button type="button" className="button-send">
+              <button
+                type="button"
+                className="button-send"
+                onClick={sendMessage}
+              >
                 <AiOutlineSend />
               </button>
             </div>
+
+            <div>
+              <button onClick={startAudio} className="audio">
+                <AiOutlineAudio />
+              </button>
+            </div>
+            {listening ? <div className="rec">rec</div> : null}
           </div>
         </div>
       </div>

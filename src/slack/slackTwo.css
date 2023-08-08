@@ -2,6 +2,7 @@
   display:flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom:1px solid rgba(0, 0, 0, 0.37);
 }
 
 .chat-name {
@@ -17,6 +18,9 @@
 }
 .message-div {
   flex:1;
+  padding:9px 20px 10px;
+  overflow-y: auto;
+
 }
 
 .chat-div {
@@ -30,9 +34,30 @@
   display:flex;
   border-radius: 10px;
   margin-bottom:5px;
+  align-items: center;
+  position: relative;
 }
 .message {
   font-size:22px;
+}
+
+.audio {
+  background-color: rgba(0, 0, 255, 0.788);
+  border-radius: 50%;
+  color:white;
+  border:none;
+  outline:none;
+  padding:3px 10px 5px 10px;
+  margin-left:3px;
+}
+
+.rec {
+  color:red;
+  font-size:10px;
+  position: absolute;
+  right:0px;
+  bottom:1px;
+  font-weight: bold;
 }
 
 .chat {
@@ -50,10 +75,31 @@
 .button-send {
   border-radius:50%;
   border:none;
-  padding:3px 10px 5px 10px;
+  padding:0px 7px 5px 10px;
   font-size:20px;
   position: relative;
   bottom:2px;
   color:white;
   background-color:rgba(51, 5, 51, 0.562);
+}
+
+.text {
+  background-color: rgb(11, 11, 73);
+  color:white;
+  white-space: wrap;
+  width:fit-content;
+  padding:10px;
+  word-break: break-all;
+  display: block;
+  margin-left: auto;
+  border-radius: 0px 20px 0px 0px;
+  margin-top:10px;
+}
+
+.text-div {
+  max-width:300px;
+  display:block;
+  margin-left:auto;
+
+
 }
