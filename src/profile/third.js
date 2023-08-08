@@ -1,15 +1,21 @@
 import React from 'react';
 import { useState } from 'react';
+import { auth, db } from '../firebase';
+import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import './third.css';
 function Channel() {
   const [channel, setChannel] = useState();
+  const [name] = useDocument(db.collection('users')?.doc(auth.currentUser.uid));
+  const [person] = useDocument(
+    db.collection('users')?.doc(auth.currentUser.uid)
+  );
   return (
     <div className="">
       <div className="team-header"></div>
 
       <div className="main-div">
         <div className="left-div">
-          <h5 className="team-name">{name}</h5>
+          <h5 className="team-name">{name?.data().teamname}</h5>
           <div className="">
             <div>
               <div
@@ -37,7 +43,9 @@ function Channel() {
               <div
                 className="personal-name px-2"
                 style={{ color: 'rgba(255,255,255,0.8)' }}
-              ></div>
+              >
+                {person?.data().userName}
+              </div>
               <div className="ps-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
                 you
               </div>

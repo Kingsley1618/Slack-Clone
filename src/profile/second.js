@@ -1,25 +1,37 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../context';
 import { auth, db } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import './second.css';
 function Personal() {
   const [val, setVal] = useState();
   const { teamname, setTeamname } = useContext(UserContext);
-  const [user] = useCollection(db.collection('users'));
+  const { userName, setUserName } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [user] = useDocument(db.collection('users')?.doc(auth.currentUser.uid));
 
+  function changeUserName() {
+    db.collection('users')?.doc(auth.currentUser.uid).update({ userName });
+    navigate('/setup-channels');
+  }
+  function changeHandler(event) {
+    setUserName(event.target.value);
+    localStorage.setItem('username', event.target.value);
+  }
+
+  useEffect(() => {
+    setUserName(localStorage.getItem('username'));
+  });
   return (
     <div className="">
       <div className="team-header"></div>
 
       <div className="main-div">
         <div className="left-div">
-          {user.docs.map((doc) => {
-            doc.data().uid === auth.currentUser.uid ? (
-              <h5 className="team-name">{doc.data().teamname}</h5>
-            ) : null;
-          })}
+          <h5 className="team-name">{user?.data().teamname}</h5>
+
           <div className="">
             <div
               className="ps-3 pt-1"
@@ -39,7 +51,7 @@ function Personal() {
                 className="personal-name px-2"
                 style={{ color: 'rgba(255,255,255,0.8)' }}
               >
-                {val}
+                {userName}
               </div>
               <div className="ps-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
                 you
@@ -59,9 +71,8 @@ function Personal() {
 
           <input
             type="text"
-            onChange={(event) => {
-              setVal(event.target.value);
-            }}
+            value={userName}
+            onChange={changeHandler}
             placeholder="Enter your full name"
             className="form-control w-100 mt-4 fs-5"
           />
@@ -86,7 +97,9 @@ function Personal() {
             </div>
           </div>
 
-          <button className="button-next btn">Next</button>
+          <button className="button-next btn" onClick={changeUserName}>
+            Next
+          </button>
         </div>
       </div>
     </div>

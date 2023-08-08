@@ -14,11 +14,17 @@ export default function Login() {
     signInWithPopup(auth, provider).then((auth) => {});
   }
 
-  
-    onAuthStateChanged(auth, (data) => {
-      db.collection("users").add({email : auth.currentUser.email, id : auth.currentUser.uid, name : auth.currentUser.displayName, photoURL: auth.currentUser.photoURL})
-    });
- 
+  onAuthStateChanged(auth, (data) => {
+    db.collection('users')
+      .doc(auth.currentUser.uid)
+      .set({
+        email: auth.currentUser.email,
+        id: auth.currentUser.uid,
+        name: auth.currentUser.displayName,
+        photoURL: auth.currentUser.photoURL,
+      });
+    console.log(auth.currentUser.uid);
+  });
 
   return (
     <div className="Login pt-5">

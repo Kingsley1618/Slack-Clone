@@ -1,14 +1,24 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import './first.css';
 import { auth, db } from '../firebase';
 import { UserContext } from '../context';
+import { useNavigate } from 'react-router-dom';
 function Team() {
-
+  const navigate = useNavigate();
   const { teamname, setTeamname } = useContext(UserContext);
-  function teamName() {
-    db.collection("users")?.add({teamname})
+  function teamName(event) {
+    db.collection('users')?.doc(auth.currentUser.uid).update({ teamname });
+    navigate("/setup-personal")
   }
+  function onChangeHandler(event) {
+    setTeamname(event.target.value);
+    localStorage.setItem("inputValue", event.target.value);
+  }
+
+  useEffect(() => {
+    setTeamname(localStorage.getItem("inputValue"));
+  }, []);
   return (
     <div className="">
       <div className="team-header"></div>
@@ -32,11 +42,11 @@ function Team() {
 
           <input
             type="text"
-            onChange={(event) => {
-              setTeamname(event.target.value);
-            }}
+            onChange={onChangeHandler}
+            value = {teamname}
             placeholder="Ex: Acme Marketing or Acme Co"
             className="form-control w-100 mt-4 fs-5"
+            maxlength="10"
           />
 
           <button className="button-next btn" onClick={teamName}>

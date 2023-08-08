@@ -12,9 +12,10 @@ import { useState } from 'react';
 export default function App() {
   const [inputVal, setInputVal] = useState();
   const [teamname, setTeamname] = useState();
+  const [userName, setUserName] = useState();
   return (
     <UserContext.Provider
-      value={{ inputVal, setInputVal, teamname, setTeamname }}
+      value={{ inputVal, setInputVal, teamname, setTeamname,userName, setUserName }}
     >
       <div className="App">
         <Routes>
