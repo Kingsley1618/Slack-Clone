@@ -1,29 +1,50 @@
 import React from 'react';
 import { useState, useContext } from 'react';
 import { UserContext } from '../context';
+import { auth, db } from '../firebase';
+import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import './second.css';
 function Personal() {
   const [val, setVal] = useState();
-  const {team, setTeam} = useContext(UserContext);
+  const { teamname, setTeamname } = useContext(UserContext);
+  const [user] = useCollection(db.collection('users'));
+
   return (
     <div className="">
       <div className="team-header"></div>
 
       <div className="main-div">
         <div className="left-div">
-          <h5 className="team-name">{team}</h5>
-<div className="">
-          <div className="ps-3 pt-1" style = {{color : "rgba(255,255,255,0.72)"}}>Direct messages</div>
-         
-          <div className="ps-2 d-flex mt-1" style = {{alignItems:"center"}}> <img src="nft.jpg" className="personal-small-image" alt="upload" />
-          <div className="personal-name px-2" style = {{color:"rgba(255,255,255,0.8)"}}>
-{val}
+          {user.docs.map((doc) => {
+            doc.data().uid === auth.currentUser.uid ? (
+              <h5 className="team-name">{doc.data().teamname}</h5>
+            ) : null;
+          })}
+          <div className="">
+            <div
+              className="ps-3 pt-1"
+              style={{ color: 'rgba(255,255,255,0.72)' }}
+            >
+              Direct messages
             </div>
-            <div className="ps-1" style = {{color:"rgba(255,255,255,0.4)"}}>
-you
+
+            <div className="ps-2 d-flex mt-1" style={{ alignItems: 'center' }}>
+              {' '}
+              <img
+                src="nft.jpg"
+                className="personal-small-image"
+                alt="upload"
+              />
+              <div
+                className="personal-name px-2"
+                style={{ color: 'rgba(255,255,255,0.8)' }}
+              >
+                {val}
+              </div>
+              <div className="ps-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                you
+              </div>
             </div>
-           
-          </div>
           </div>
         </div>
 
@@ -55,7 +76,10 @@ you
                 <div>
                   Help your teammates know they’re talking to the right person.
                 </div>
-                <button type="button" className="btn border border-2 mt-3 fw-bold">
+                <button
+                  type="button"
+                  className="btn border border-2 mt-3 fw-bold"
+                >
                   Upload Photo
                 </button>
               </div>

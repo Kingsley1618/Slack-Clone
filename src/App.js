@@ -11,9 +11,11 @@ import Slack from './slack/slack';
 import { useState } from 'react';
 export default function App() {
   const [inputVal, setInputVal] = useState();
-  const [team, setTeam] = useState();
+  const [teamname, setTeamname] = useState();
   return (
-    <UserContext.Provider value={{ inputVal, setInputVal, team, setTeam }}>
+    <UserContext.Provider
+      value={{ inputVal, setInputVal, teamname, setTeamname }}
+    >
       <div className="App">
         <Routes>
           <Route path="/" element={<Login />} />

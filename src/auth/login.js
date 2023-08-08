@@ -1,15 +1,25 @@
-import React, { StrictMode } from 'react';
+import React, { StrictMode, useContext, useEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { AiFillApple } from 'react-icons/ai';
-import { auth } from '../firebase';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth, db } from '../firebase';
+import { UserContext } from '../context';
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+} from 'firebase/auth';
 export default function Login() {
   function googleHandler() {
     const provider = new GoogleAuthProvider();
-   signInWithPopup(auth,provider).then((auth)=> {
-     console.log(auth)
-   })
+    signInWithPopup(auth, provider).then((auth) => {});
   }
+
+  
+    onAuthStateChanged(auth, (data) => {
+      db.collection("users").add({email : auth.currentUser.email, id : auth.currentUser.uid, name : auth.currentUser.displayName, photoURL: auth.currentUser.photoURL})
+    });
+ 
+
   return (
     <div className="Login pt-5">
       <img

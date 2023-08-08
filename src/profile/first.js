@@ -1,12 +1,13 @@
 import React from 'react';
 import { useState, useContext } from 'react';
 import './first.css';
+import { auth, db } from '../firebase';
 import { UserContext } from '../context';
 function Team() {
-  const [name, setName] = useState();
-  const { team, setTeam } = useContext(UserContext);
+
+  const { teamname, setTeamname } = useContext(UserContext);
   function teamName() {
-    setTeam(name);
+    db.collection("users")?.add({teamname})
   }
   return (
     <div className="">
@@ -14,7 +15,7 @@ function Team() {
 
       <div className="main-div">
         <div className="left-div">
-          <h5 className="team-name">{name}</h5>
+          <h5 className="team-name">{teamname}</h5>
         </div>
 
         <div className="right-div px-5 pt-4">
@@ -32,7 +33,7 @@ function Team() {
           <input
             type="text"
             onChange={(event) => {
-              setName(event.target.value);
+              setTeamname(event.target.value);
             }}
             placeholder="Ex: Acme Marketing or Acme Co"
             className="form-control w-100 mt-4 fs-5"
