@@ -3,12 +3,14 @@ import { FcGoogle } from 'react-icons/fc';
 import { AiFillApple } from 'react-icons/ai';
 import { auth, db } from '../firebase';
 import { UserContext } from '../context';
+import {useNavigate} from "react-router-dom";
 import {
   signInWithPopup,
   GoogleAuthProvider,
   onAuthStateChanged,
 } from 'firebase/auth';
 export default function Login() {
+  const navigate = useNavigate();
   function googleHandler() {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider).then((auth) => {});
@@ -23,7 +25,7 @@ export default function Login() {
         name: auth.currentUser.displayName,
         photoURL: auth.currentUser.photoURL,
       });
-    console.log(auth.currentUser.uid);
+   navigate("/setup-team")
   });
 
   return (

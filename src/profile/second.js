@@ -1,8 +1,10 @@
 import React from 'react';
 import { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../context';
+import firebase from 'firebase/compat/app';
 import { auth, db, storage } from '../firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import 'firebase/compat/storage';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import './second.css';
@@ -10,7 +12,8 @@ function Personal() {
   const [val, setVal] = useState();
   const { teamname, setTeamname } = useContext(UserContext);
   const { userName, setUserName } = useContext(UserContext);
-  const [file, setFile] = useState("");
+  const { numb, setNumb } = useState(10);
+  const [file, setFile] = useState('');
 
   // progress
   const [percent, setPercent] = useState(0);
@@ -19,48 +22,50 @@ function Personal() {
 
   function changeUserName() {
     db.collection('users')?.doc(auth.currentUser.uid).update({ userName });
-    navigate('/setup-channels');
+    navigate('/setup-slack');
   }
   function handleChange(event) {
     setFile(event.target.files[0]);
-}
+  }
   function changeHandler(event) {
     setUserName(event.target.value);
     localStorage.setItem('username', event.target.value);
+    setNumb((numb) => numb - userName.length);
   }
 
   useEffect(() => {
     setUserName(localStorage.getItem('username'));
   });
 
-
   function handleUpload() {
     if (!file) {
-        alert("Please choose a file first!")
+      alert('Please choose a file first!');
     }
- 
-    const storageRef = ref(storage,`/files/${file.name}`)
+
+    const storageRef = firebase.storage().ref(`/files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
- 
-    uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-            const percent = Math.round(
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
- 
-            // update progress
-            setPercent(percent);
-        },
-        (err) => console.log(err),
-        () => {
-            // download url
-            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                console.log(url);
-            });
-        }
-    ); 
-}
+
+    storageRef.put(file).on(
+      'state_changed',
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+
+        // update progress
+        setPercent(percent);
+      },
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          db.collection('users')
+            .doc(auth.currentUser.uid)
+            .update({ photoURL: url });
+        });
+      }
+    );
+  }
 
   return (
     <div className="">
@@ -81,7 +86,7 @@ function Personal() {
             <div className="ps-2 d-flex mt-1" style={{ alignItems: 'center' }}>
               {' '}
               <img
-                src="nft.jpg"
+                src={user?.data().photoURL}
                 className="personal-small-image"
                 alt="upload"
               />
@@ -110,20 +115,23 @@ function Personal() {
             Adding your name and profile photo helps your teammates recognize
             and connect with you more easily.
           </div>
-
-          <input
-            type="text"
-            value={userName}
-            onChange={changeHandler}
-            placeholder="Enter your full name"
-            className="form-control w-100 mt-4 fs-5"
-          />
+          <div style={{ width: '100%' }}>
+            <input
+              type="text"
+              value={userName}
+              onChange={changeHandler}
+              maxlength="10"
+              placeholder="Enter your full name"
+              className="form-control w-100 mt-4 fs-5"
+            />
+            <div>{numb}</div>
+          </div>
 
           <div className="mt-5">
             <h6>Your profile photo(optional)</h6>
 
             <div className="d-flex">
-               <input type="file" onChange={handleChange} accept="/image/*" />
+              <input type="file" onChange={handleChange} accept="/image/*" />
 
               <div className="ps-3">
                 <div>

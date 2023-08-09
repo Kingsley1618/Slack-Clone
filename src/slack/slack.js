@@ -7,7 +7,7 @@ import './slackTwo.css';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { AiOutlineSearch } from 'react-icons/ai';
 import firebase from 'firebase/compat/app';
-import { db } from '../firebase';
+import {auth, db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineAudio } from 'react-icons/ai';
 import { UserActions } from '../store';
@@ -27,6 +27,9 @@ function Slack() {
   const channelId = useSelector((state) => state.id);
   const [text, setText] = useState();
   const [newChannel, error, loading] = useCollection(db.collection('rooms'));
+  const [photo] = useDocument(
+    db.collection('users')?.doc(auth.currentUser.uid)
+  );
   const [messageText] = useCollection(
     channelId && db.collection('rooms').doc(channelId).collection('messages')
   );
@@ -43,7 +46,7 @@ function Slack() {
       text,
       timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
-    setText("")
+    setText('');
   }
 
   function addChannel() {
@@ -64,7 +67,6 @@ function Slack() {
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser doesn't support speech recognition.</span>;
   }
-
 
   function startAudio() {
     SpeechRecognition.startListening();
@@ -93,7 +95,7 @@ function Slack() {
 
         <div className="right-nav">
           <AiOutlineQuestionCircle className="circle" />
-          <img src="nft.jpg" className="profile-img" />
+          <img src={photo?.data().photoURL} className="profile-img" />
         </div>
       </div>
 
@@ -116,7 +118,6 @@ function Slack() {
               Channels
             </div>
           </div>
-         
 
           {newChannel?.docs?.map((doc) => {
             return (
