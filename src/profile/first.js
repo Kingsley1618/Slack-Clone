@@ -29,7 +29,7 @@ function Team() {
         </div>
 
         <div className="right-div px-5 pt-4">
-          <div style={{ fontSize: '13px' }}>Step 1 of 4</div>
+          <div style={{ fontSize: '13px' }}>Step 1 of 2</div>
 
           <h1 className="fw-bold pt-3">
             What’s the name of your <br />

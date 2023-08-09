@@ -3,6 +3,7 @@ import { useState, useContext, useEffect } from 'react';
 import './slack.css';
 import { UserContext } from '../context';
 import './slackTwo.css';
+
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { AiOutlineSearch } from 'react-icons/ai';
 import firebase from 'firebase/compat/app';
@@ -21,6 +22,7 @@ import SpeechRecognition, {
 import { BiSolidRightArrow } from 'react-icons/bi';
 function Slack() {
   const [channel, setChannel] = useState();
+
   const { inputVal, setInputVal } = useContext(UserContext);
   const channelId = useSelector((state) => state.id);
   const [text, setText] = useState();
@@ -62,6 +64,8 @@ function Slack() {
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser doesn't support speech recognition.</span>;
   }
+
+
   function startAudio() {
     SpeechRecognition.startListening();
   }
@@ -112,12 +116,9 @@ function Slack() {
               Channels
             </div>
           </div>
-          <div className="channel d-flex">
-            <div className="hash text-white">#</div>
-            <div className="channel-name">general</div>
-          </div>
+         
 
-          {newChannel?.docs.map((doc) => {
+          {newChannel?.docs?.map((doc) => {
             return (
               open && (
                 <div

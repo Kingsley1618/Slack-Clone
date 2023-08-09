@@ -22,7 +22,7 @@ export default function App() {
           <Route path="/" element={<Login />} />
           <Route path="/setup-team" element={<Team />} />
           <Route path="/setup-personal" element={<Personal />} />
-          <Route path="/setup-channels" element={<Channel />} />
+         
           <Route path="/setup-slack" element={<Slack />} />
         </Routes>
       </div>

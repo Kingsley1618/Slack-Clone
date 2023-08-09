@@ -1,7 +1,8 @@
 import React from 'react';
 import { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../context';
-import { auth, db } from '../firebase';
+import { auth, db, storage } from '../firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useNavigate } from 'react-router-dom';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import './second.css';
@@ -9,6 +10,10 @@ function Personal() {
   const [val, setVal] = useState();
   const { teamname, setTeamname } = useContext(UserContext);
   const { userName, setUserName } = useContext(UserContext);
+  const [file, setFile] = useState("");
+
+  // progress
+  const [percent, setPercent] = useState(0);
   const navigate = useNavigate();
   const [user] = useDocument(db.collection('users')?.doc(auth.currentUser.uid));
 
@@ -16,6 +21,9 @@ function Personal() {
     db.collection('users')?.doc(auth.currentUser.uid).update({ userName });
     navigate('/setup-channels');
   }
+  function handleChange(event) {
+    setFile(event.target.files[0]);
+}
   function changeHandler(event) {
     setUserName(event.target.value);
     localStorage.setItem('username', event.target.value);
@@ -24,6 +32,36 @@ function Personal() {
   useEffect(() => {
     setUserName(localStorage.getItem('username'));
   });
+
+
+  function handleUpload() {
+    if (!file) {
+        alert("Please choose a file first!")
+    }
+ 
+    const storageRef = ref(storage,`/files/${file.name}`)
+    const uploadTask = uploadBytesResumable(storageRef, file);
+ 
+    uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+            const percent = Math.round(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+ 
+            // update progress
+            setPercent(percent);
+        },
+        (err) => console.log(err),
+        () => {
+            // download url
+            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                console.log(url);
+            });
+        }
+    ); 
+}
+
   return (
     <div className="">
       <div className="team-header"></div>
@@ -48,8 +86,12 @@ function Personal() {
                 alt="upload"
               />
               <div
-                className="personal-name px-2"
-                style={{ color: 'rgba(255,255,255,0.8)' }}
+                className="personal-name px-2 fw-bold"
+                style={{
+                  color: 'rgba(255,255,255,0.9)',
+                  position: 'relative',
+                  top: '2px',
+                }}
               >
                 {userName}
               </div>
@@ -61,7 +103,7 @@ function Personal() {
         </div>
 
         <div className="right-div px-5 pt-4">
-          <div style={{ fontSize: '13px' }}>Step 2 of 4</div>
+          <div style={{ fontSize: '13px' }}>Step 2 of 2</div>
 
           <h1 className="fw-bold pt-3">What’s your name?</h1>
           <div>
@@ -81,7 +123,7 @@ function Personal() {
             <h6>Your profile photo(optional)</h6>
 
             <div className="d-flex">
-              <img src="nft.jpg" className="personal-image" alt="upload" />
+               <input type="file" onChange={handleChange} accept="/image/*" />
 
               <div className="ps-3">
                 <div>
@@ -90,6 +132,7 @@ function Personal() {
                 <button
                   type="button"
                   className="btn border border-2 mt-3 fw-bold"
+                  onClick={handleUpload}
                 >
                   Upload Photo
                 </button>
