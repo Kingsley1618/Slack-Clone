@@ -12,7 +12,7 @@ function Personal() {
   const [val, setVal] = useState();
   const { teamname, setTeamname } = useContext(UserContext);
   const { userName, setUserName } = useContext(UserContext);
-  const { numb, setNumb } = useState(10);
+
   const [file, setFile] = useState('');
 
   // progress
@@ -30,7 +30,6 @@ function Personal() {
   function changeHandler(event) {
     setUserName(event.target.value);
     localStorage.setItem('username', event.target.value);
-    setNumb((numb) => numb - userName.length);
   }
 
   useEffect(() => {
@@ -115,16 +114,16 @@ function Personal() {
             Adding your name and profile photo helps your teammates recognize
             and connect with you more easily.
           </div>
-          <div style={{ width: '100%' }}>
+          <div style={{ width: '100%', position : "relative"}}>
             <input
               type="text"
               value={userName}
               onChange={changeHandler}
-              maxlength="10"
+              maxlength="15"
               placeholder="Enter your full name"
               className="form-control w-100 mt-4 fs-5"
             />
-            <div>{numb}</div>
+            <div style = {{position:"absolute", top:"33px", right:"10px"}}>{userName?.length}</div>
           </div>
 
           <div className="mt-5">

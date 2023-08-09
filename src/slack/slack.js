@@ -7,7 +7,7 @@ import './slackTwo.css';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { AiOutlineSearch } from 'react-icons/ai';
 import firebase from 'firebase/compat/app';
-import {auth, db } from '../firebase';
+import { auth, db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineAudio } from 'react-icons/ai';
 import { UserActions } from '../store';
@@ -102,7 +102,7 @@ function Slack() {
       <div className="main-div">
         <div className="left-div">
           <div className="left-header">
-            <div className="text-white fw-bold">kings</div>
+            <div className="text-white fw-bold">{photo?.data().userName}</div>
 
             <div className="note">
               <PiNotePencilDuotone />
