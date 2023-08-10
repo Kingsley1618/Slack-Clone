@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import './slack.css';
 import { UserContext } from '../context';
 import './slackTwo.css';
@@ -15,14 +15,14 @@ import { BsChatLeftDots } from 'react-icons/bs';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { AiOutlineSend } from 'react-icons/ai';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
-import { PiNotePencilDuotone } from 'react-icons/pi';
+import { BiUser } from 'react-icons/bi';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
 import { BiSolidRightArrow } from 'react-icons/bi';
 function Slack() {
   const [channel, setChannel] = useState();
-
+const userScroll = useRef();
   const { inputVal, setInputVal } = useContext(UserContext);
   const channelId = useSelector((state) => state.id);
   const [text, setText] = useState();
@@ -31,7 +31,7 @@ function Slack() {
     db.collection('users')?.doc(auth.currentUser.uid)
   );
   const [messageText] = useCollection(
-    channelId && db.collection('rooms').doc(channelId).collection('messages')
+    channelId && db.collection('rooms').doc(channelId).collection('messages').orderBy("timeStamp", "asc")
   );
   const [roomName, stop, waiting] = useDocument(
     channelId && db.collection('rooms').doc(channelId)
@@ -80,6 +80,10 @@ function Slack() {
 
     changingVoice();
   }, [transcript]);
+
+  useEffect(()=> {
+userScroll.current.scrollIntoView({behavior:"smooth"})
+  },[channelId])
   return (
     <div className="">
       <div className="slack-header">
@@ -105,7 +109,7 @@ function Slack() {
             <div className="text-white fw-bold">{photo?.data().userName}</div>
 
             <div className="note">
-              <PiNotePencilDuotone />
+              <BiUser />
             </div>
           </div>
 
@@ -172,10 +176,12 @@ function Slack() {
             {messageText?.docs.map((doc) => {
               return (
                 <div className="text-div">
-                  <div className="text">{doc.data().text}</div>
+                 
+                  <div className="text"> <div className="nameofuser">{photo?.data().userName}</div>{doc.data().text}</div>
                 </div>
               );
             })}
+            <div ref= {userScroll}></div>
           </div>
 
           <div className="chat-input">
