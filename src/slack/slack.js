@@ -14,7 +14,7 @@ import { BsChatLeftDots } from 'react-icons/bs';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { AiOutlineSend } from 'react-icons/ai';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
-import { PiNotePencilDuotone } from 'react-icons/pi';
+import { AiOutlineUser } from 'react-icons/ai';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
@@ -22,13 +22,15 @@ import { BiSolidRightArrow } from 'react-icons/bi';
 function Slack() {
   const [channel, setChannel] = useState();
   const userScroll = useRef();
+  const {output,setOutput} = useState();
   const { inputVal, setInputVal } = useContext(UserContext);
   const channelId = useSelector((state) => state.id);
   const [text, setText] = useState();
-  const [able, setAble] = useState(false);
-  const [newChannel, error, loading] = useCollection(db.collection('rooms'));
+
+  const [btnable, setBtnable] = useState(false);
+  const [newChannel, error, loading] = useCollection(db.collection('rooms')?.orderBy("timeStamp","asc"));
   const [photo] = useDocument(
-    db.collection('users')?.doc(auth.currentUser.uid)
+    db.collection('users')?.doc(auth?.currentUser?.uid)
   );
   const [messageText] = useCollection(
     channelId &&
@@ -53,11 +55,12 @@ function Slack() {
       timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     setText('');
-    userScroll?.current?.scrollIntoView({ behavior: 'smooth' });
+    userScroll.current.scrollIntoView(true);
   }
 
   function addChannel() {
-    db.collection('rooms').add({ inputVal });
+    db.collection('rooms').add({ inputVal, timeStamp: firebase.firestore.FieldValue.serverTimestamp() });
+    setInputVal("")
   }
 
   function selectChannel(id) {
@@ -89,14 +92,18 @@ function Slack() {
   }, [transcript]);
 
   useEffect(() => {
-    userScroll?.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [channelId, loading]);
+    userScroll?.current?.scrollIntoView(true);
+  },[channelId,loading]);
 
   useEffect(() => {
-    if(text.trim().length < 1){
-setAble(true)
+    if (!text || text.trim().length < 1) {
+      setBtnable(true);
+    } else {
+      setBtnable(false);
     }
-  }, []);
+  }, [text]);
+
+
   return (
     <div className="">
       <div className="slack-header">
@@ -105,7 +112,7 @@ setAble(true)
         <div className="center-nav">
           <AiOutlineClockCircle className="clock" />
           <div className="search-div">
-            <input type="text" className="nav-input" value="Search kings" />
+            <input type="text" className="nav-input" value="search" disabled = {true}/>
             <AiOutlineSearch className="search" />
           </div>
         </div>
@@ -122,7 +129,7 @@ setAble(true)
             <div className="text-white fw-bold">{photo?.data().userName}</div>
 
             <div className="note">
-              <PiNotePencilDuotone />
+              <AiOutlineUser />
             </div>
           </div>
 
@@ -205,17 +212,17 @@ setAble(true)
                       <div className="time ps-1">
                         {new Date(
                           doc?.data().timeStamp?.toDate()
-                        ).toLocaleTimeString()}
+                        ).toUTCString()}
                       </div>
                     </div>
-                    <div className="" style={{ fontSize: '13px' }}>
+                    <div className="" ref={userScroll} style={{ fontSize: '13px' }}>
                       {doc?.data().text}
                     </div>
                   </div>
                 </div>
               );
             })}
-            <div ref={userScroll}>hey</div>
+           
           </div>
 
           <div className="chat-input">
@@ -235,7 +242,7 @@ setAble(true)
                 type="button"
                 className="button-send"
                 onClick={sendMessage}
-                disabled = {able ? true : false}
+                disabled={btnable ? true : false}
               >
                 <AiOutlineSend />
               </button>
@@ -254,3 +261,4 @@ setAble(true)
   );
 }
 export default Slack;
+
