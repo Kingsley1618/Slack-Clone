@@ -3,7 +3,6 @@ import { useState, useContext, useEffect, useRef } from 'react';
 import './slack.css';
 import { UserContext } from '../context';
 import './slackTwo.css';
-
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { AiOutlineSearch } from 'react-icons/ai';
 import firebase from 'firebase/compat/app';
@@ -15,17 +14,18 @@ import { BsChatLeftDots } from 'react-icons/bs';
 import { useCollection, useDocument } from 'react-firebase-hooks/firestore';
 import { AiOutlineSend } from 'react-icons/ai';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
-import { BiUser } from 'react-icons/bi';
+import { PiNotePencilDuotone } from 'react-icons/pi';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
 import { BiSolidRightArrow } from 'react-icons/bi';
 function Slack() {
   const [channel, setChannel] = useState();
-  const userScroll = useRef(null);
+  const userScroll = useRef();
   const { inputVal, setInputVal } = useContext(UserContext);
   const channelId = useSelector((state) => state.id);
   const [text, setText] = useState();
+  const [able, setAble] = useState(false);
   const [newChannel, error, loading] = useCollection(db.collection('rooms'));
   const [photo] = useDocument(
     db.collection('users')?.doc(auth.currentUser.uid)
@@ -38,6 +38,7 @@ function Slack() {
         .collection('messages')
         .orderBy('timeStamp', 'asc')
   );
+
   const [roomName, stop, waiting] = useDocument(
     channelId && db.collection('rooms').doc(channelId)
   );
@@ -52,6 +53,7 @@ function Slack() {
       timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     setText('');
+    userScroll?.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   function addChannel() {
@@ -88,6 +90,12 @@ function Slack() {
 
   useEffect(() => {
     userScroll?.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [channelId, loading]);
+
+  useEffect(() => {
+    if(text.trim().length < 1){
+setAble(true)
+    }
   }, []);
   return (
     <div className="">
@@ -114,7 +122,7 @@ function Slack() {
             <div className="text-white fw-bold">{photo?.data().userName}</div>
 
             <div className="note">
-              <BiUser />
+              <PiNotePencilDuotone />
             </div>
           </div>
 
@@ -195,7 +203,9 @@ function Slack() {
                         {photo?.data().userName}
                       </div>
                       <div className="time ps-1">
-                        {new Date(doc?.data().timeStamp).toUTCString()}
+                        {new Date(
+                          doc?.data().timeStamp?.toDate()
+                        ).toLocaleTimeString()}
                       </div>
                     </div>
                     <div className="" style={{ fontSize: '13px' }}>
@@ -225,6 +235,7 @@ function Slack() {
                 type="button"
                 className="button-send"
                 onClick={sendMessage}
+                disabled = {able ? true : false}
               >
                 <AiOutlineSend />
               </button>
