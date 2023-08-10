@@ -24,6 +24,7 @@
   flex: 1;
   padding: 9px 20px 10px;
   overflow-y: auto;
+  width:100%;
 }
 
 .chat-div {
@@ -85,21 +86,21 @@
   background-color: rgba(51, 5, 51, 0.562);
 }
 
-.text {
-  background-color: rgb(11, 11, 73);
-  color: white;
-  white-space: wrap;
-  width: fit-content;
-  padding: 10px;
-  word-break: break-all;
-  display: block;
-  margin-left: auto;
-  border-radius: 0px 20px 0px 0px;
-  margin-top: 10px;
-}
+
 
 .text-div {
-  max-width: 300px;
-  display: block;
-  margin-left: auto;
+  display: flex;
+  width:100%;
+  align-items: center;
+  margin:0px 0px 16px 0px;
+}
+.userphoto {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+}
+
+.time {
+  font-size: 7px;
+  color:rgba(128, 128, 128, 0.815);
 }

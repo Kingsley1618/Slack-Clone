@@ -22,7 +22,7 @@ import SpeechRecognition, {
 import { BiSolidRightArrow } from 'react-icons/bi';
 function Slack() {
   const [channel, setChannel] = useState();
-const userScroll = useRef();
+  const userScroll = useRef(null);
   const { inputVal, setInputVal } = useContext(UserContext);
   const channelId = useSelector((state) => state.id);
   const [text, setText] = useState();
@@ -31,7 +31,12 @@ const userScroll = useRef();
     db.collection('users')?.doc(auth.currentUser.uid)
   );
   const [messageText] = useCollection(
-    channelId && db.collection('rooms').doc(channelId).collection('messages').orderBy("timeStamp", "asc")
+    channelId &&
+      db
+        .collection('rooms')
+        .doc(channelId)
+        .collection('messages')
+        .orderBy('timeStamp', 'asc')
   );
   const [roomName, stop, waiting] = useDocument(
     channelId && db.collection('rooms').doc(channelId)
@@ -81,9 +86,9 @@ const userScroll = useRef();
     changingVoice();
   }, [transcript]);
 
-  useEffect(()=> {
-userScroll.current.scrollIntoView({behavior:"smooth"})
-  },[channelId])
+  useEffect(() => {
+    userScroll?.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [channelId]);
   return (
     <div className="">
       <div className="slack-header">
@@ -176,12 +181,31 @@ userScroll.current.scrollIntoView({behavior:"smooth"})
             {messageText?.docs.map((doc) => {
               return (
                 <div className="text-div">
-                 
-                  <div className="text"> <div className="nameofuser">{photo?.data().userName}</div>{doc.data().text}</div>
+                  <div className="photoofuser">
+                    <img
+                      src={photo?.data().photoURL}
+                      className="userphoto"
+                      alt="image"
+                    />
+                  </div>
+
+                  <div className="right-text ms-1" style={{ width: '100%' }}>
+                    <div className="d-flex" style={{ alignItems: 'center' }}>
+                      <div className="fw-bold" style={{ fontSize: '15px' }}>
+                        {photo?.data().userName}
+                      </div>
+                      <div className="time ps-1">
+                        {new Date(doc?.data().timeStamp).toUTCString()}
+                      </div>
+                    </div>
+                    <div className="" style={{ fontSize: '13px' }}>
+                      {doc?.data().text}
+                    </div>
+                  </div>
                 </div>
               );
             })}
-            <div ref= {userScroll}></div>
+            <div ref={userScroll}>hey</div>
           </div>
 
           <div className="chat-input">
