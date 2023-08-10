@@ -261,4 +261,3 @@ function Slack() {
   );
 }
 export default Slack;
-
