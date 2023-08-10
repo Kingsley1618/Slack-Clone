@@ -58,7 +58,6 @@ function Slack() {
       timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     setText('');
-    userScroll.current.scrollIntoView(true);
   }
 
   function addChannel() {
@@ -96,10 +95,6 @@ function Slack() {
 
     changingVoice();
   }, [transcript]);
-
-  useEffect(() => {
-    userScroll?.current?.scrollIntoView(true);
-  }, [channelId, loading]);
 
   useEffect(() => {
     if (!text || text.trim().length < 1) {
