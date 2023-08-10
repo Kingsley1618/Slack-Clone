@@ -88,7 +88,7 @@ function Slack() {
 
   useEffect(() => {
     userScroll?.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [channelId]);
+  },[]);
   return (
     <div className="">
       <div className="slack-header">
@@ -205,7 +205,7 @@ function Slack() {
                 </div>
               );
             })}
-            <div ref={userScroll}>hey</div>
+            <div ref={userScroll}>hey nate</div>
           </div>
 
           <div className="chat-input">
