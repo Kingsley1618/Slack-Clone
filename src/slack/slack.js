@@ -3,6 +3,7 @@ import { useState, useContext, useEffect, useRef } from 'react';
 import './slack.css';
 import { UserContext } from '../context';
 import './slackTwo.css';
+import 'regenerator-runtime/runtime';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { AiOutlineSearch } from 'react-icons/ai';
 import firebase from 'firebase/compat/app';
@@ -22,13 +23,15 @@ import { BiSolidRightArrow } from 'react-icons/bi';
 function Slack() {
   const [channel, setChannel] = useState();
   const userScroll = useRef();
-  const {output,setOutput} = useState();
+  const { output, setOutput } = useState();
   const { inputVal, setInputVal } = useContext(UserContext);
   const channelId = useSelector((state) => state.id);
   const [text, setText] = useState();
 
   const [btnable, setBtnable] = useState(false);
-  const [newChannel, error, loading] = useCollection(db.collection('rooms')?.orderBy("timeStamp","asc"));
+  const [newChannel, error, loading] = useCollection(
+    db.collection('rooms')?.orderBy('timeStamp', 'asc')
+  );
   const [photo] = useDocument(
     db.collection('users')?.doc(auth?.currentUser?.uid)
   );
@@ -59,8 +62,11 @@ function Slack() {
   }
 
   function addChannel() {
-    db.collection('rooms').add({ inputVal, timeStamp: firebase.firestore.FieldValue.serverTimestamp() });
-    setInputVal("")
+    db.collection('rooms').add({
+      inputVal,
+      timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    setInputVal('');
   }
 
   function selectChannel(id) {
@@ -93,7 +99,7 @@ function Slack() {
 
   useEffect(() => {
     userScroll?.current?.scrollIntoView(true);
-  },[channelId,loading]);
+  }, [channelId, loading]);
 
   useEffect(() => {
     if (!text || text.trim().length < 1) {
@@ -103,7 +109,6 @@ function Slack() {
     }
   }, [text]);
 
-
   return (
     <div className="">
       <div className="slack-header">
@@ -112,7 +117,12 @@ function Slack() {
         <div className="center-nav">
           <AiOutlineClockCircle className="clock" />
           <div className="search-div">
-            <input type="text" className="nav-input" value="search" disabled = {true}/>
+            <input
+              type="text"
+              className="nav-input"
+              value="search"
+              disabled={true}
+            />
             <AiOutlineSearch className="search" />
           </div>
         </div>
@@ -215,14 +225,17 @@ function Slack() {
                         ).toUTCString()}
                       </div>
                     </div>
-                    <div className="" ref={userScroll} style={{ fontSize: '13px' }}>
+                    <div
+                      className=""
+                      ref={userScroll}
+                      style={{ fontSize: '13px' }}
+                    >
                       {doc?.data().text}
                     </div>
                   </div>
                 </div>
               );
             })}
-           
           </div>
 
           <div className="chat-input">
